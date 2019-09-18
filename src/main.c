@@ -57,9 +57,8 @@ int main (void)
     // Configuracion led. & Enabled Channels
     GpioInit();
 
-    //enciendo usart1
-    Usart1Config();
 
+#ifdef HARD_TEST_MODE_LED_SWITCH
     while(1)
     {
         if (USER_BLUE)
@@ -68,13 +67,52 @@ int main (void)
             LED_OFF;
 
         Wait_ms(10);
-        Usart1Send("M");
-    }
+    }    
+#endif
 
+#ifdef HARD_TEST_MODE_USART1_TX
+    //enciendo usart1
+    Usart1Config();
 
-    // //enciendo usart2 para comunicacion con micros
-    // Usart2Config();
+    while(1)
+    {
+        if (USER_BLUE)
+        {
+            LED_ON;
+            Usart1Send("User Blue Switch\n");
+            Wait_ms(100);
+        }
+        else
+            LED_OFF;
+
+        if (!timer_standby)
+        {
+            timer_standby = 1000;
+            Usart1Send("M");
+        }
+    }    
+#endif
+
+#ifdef HARD_TEST_MODE_USART1_RX
+    //enciendo usart1
+    Usart1Config();
+    char buff_local [128] = { 0 };
+    unsigned char readed = 0;
+
+    while(1)
+    {
+        Wait_ms(3000);
+        if (usart1_have_data)
+        {
+            readed = ReadUsart1Buffer(buff_local, 127);
+            *(buff_local + readed) = '\n';    //cambio el '\0' por '\n' antes de enviar
+            *(buff_local + readed + 1) = '\0';    //ajusto el '\0'
+            Usart1Send(buff_local);
+        }
+    }    
+#endif
     
+
 
     //-- Welcome Messages --------------------
 // #ifdef HARD

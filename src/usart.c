@@ -138,7 +138,6 @@ unsigned char ReadUsart1Buffer (unsigned char * bout, unsigned short max_len)
     {
         //el prx1 siempre llega adelantado desde la int, lo corto con un 0
         *prx1 = '\0';
-        prx1++;
         len += 1;
         memcpy(bout, (unsigned char *) rx1buff, len);
     }

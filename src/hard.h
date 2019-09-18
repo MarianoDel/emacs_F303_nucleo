@@ -34,6 +34,14 @@
 // #define USE_CHANNELS_WITH_PRELOAD
 #endif
 //-------- Type of Program and Features ----------------
+// #define HARD_TEST_MODE_LED_SWITCH
+// #define HARD_TEST_MODE_USART1_TX
+#define HARD_TEST_MODE_USART1_RX
+// #define HARD_TEST_MODE_
+// #define HARD_TEST_MODE_
+// #define HARD_TEST_MODE_
+// #define HARD_TEST_MODE_
+// #define HARD_TEST_MODE_
 
 //-------- Kind of Reports Sended ----------------
 

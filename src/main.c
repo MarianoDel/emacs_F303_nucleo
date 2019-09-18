@@ -131,13 +131,15 @@ int main (void)
     
     while(1)
     {
-        if (ADC1->ISR & ADC_ISR_EOC)
+        if (ADC1->ISR & ADC_ISR_EOS)
         {
-            ADC1->ISR |= ADC_ISR_EOC;
+            ADC1->ISR |= ADC_ISR_EOS;
             if (LED)
                 LED_OFF;
             else
                 LED_ON;
+            
+            // ADC1->CR |= ADC_CR_ADSTART;
         }
     }    
 #endif

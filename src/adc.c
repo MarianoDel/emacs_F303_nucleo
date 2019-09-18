@@ -134,6 +134,7 @@ void AdcConfig (void)
     
     //Enable the ADC
     ADC1->CR |= ADC_CR_ADEN;
+    while (!(ADC1->ISR & ADC_ISR_ADRDY));
 
 #ifdef ADC_WITH_DMA
     ADC1->CFGR |= ADC_CFGR_DMAEN;

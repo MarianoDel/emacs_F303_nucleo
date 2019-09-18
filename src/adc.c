@@ -138,7 +138,7 @@ void AdcConfig (void)
 
 #ifdef ADC_WITH_DMA
     ADC1->CFGR |= ADC_CFGR_DMAEN;
-    ADC1->CFGR |= ADC_CFGR_DMACFG;    //circular mode??
+    ADC1->CFGR |= ADC_CFGR_DMACFG;    //circular mode
 #endif
 }
 

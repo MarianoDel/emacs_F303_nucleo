@@ -8,7 +8,7 @@
 //---------------------------------------------
 
 #include "dma.h"
-#include "stm32f10x.h"
+#include "stm32f3xx.h"
 
 #include "adc.h"
 
@@ -30,14 +30,13 @@ void DMAConfig(void)
 
     //Configuro el control del DMA CH1
     DMA1_Channel1->CCR = 0;
-    //priority very high
+    //priority high
     //memory halfword
     //peripheral halfword
     //increment memory
-    DMA1_Channel1->CCR |= DMA_CCR1_PL | DMA_CCR1_MSIZE_0 | DMA_CCR1_PSIZE_0 | DMA_CCR1_MINC;
-    //DMA1_Channel1->CCR |= DMA_Mode_Circular | DMA_CCR_TCIE;
+    DMA1_Channel1->CCR |= DMA_CCR_PL_1 | DMA_CCR_MSIZE_0 | DMA_CCR_PSIZE_0 | DMA_CCR_MINC;
     //cicular mode
-    DMA1_Channel1->CCR |= DMA_CCR1_CIRC;
+    DMA1_Channel1->CCR |= DMA_CCR_CIRC;
 
     //Tamaño del buffer a transmitir
     DMA1_Channel1->CNDTR = ADC_CHANNEL_QUANTITY;
@@ -58,12 +57,12 @@ void DMAConfig(void)
 
 void DMAEnableInterrupt (void)
 {
-    DMA1_Channel1->CCR |= DMA_CCR1_TCIE;
+    DMA1_Channel1->CCR |= DMA_CCR_TCIE;
 }
 
 void DMADisableInterrupt (void)
 {
-    DMA1_Channel1->CCR &= ~DMA_CCR1_TCIE;
+    DMA1_Channel1->CCR &= ~DMA_CCR_TCIE;
 }
 
 #ifdef DMA_WITH_INTERRUPT

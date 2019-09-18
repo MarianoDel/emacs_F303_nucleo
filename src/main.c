@@ -16,6 +16,7 @@
 #include "timer.h"
 #include "usart.h"
 #include "adc.h"
+#include "dma.h"
 
 
 
@@ -124,6 +125,7 @@ int main (void)
 #endif
 
 #ifdef HARD_TEST_MODE_ADC1
+    //undef the dma conf on adc.h
     AdcConfig();
 
     //Start convertions
@@ -138,8 +140,28 @@ int main (void)
                 LED_OFF;
             else
                 LED_ON;
+        }
+    }    
+#endif
+
+#ifdef HARD_TEST_MODE_ADC1_DMA
+    //ADC & DMA
+    AdcConfig();
+    DMAConfig();
+    DMA1_Channel1->CCR |= DMA_CCR_EN;
+    ADC1->CR |= ADC_CR_ADSTART;
+    //end of ADC & DMA
+    
+    while(1)
+    {
+        if (sequence_ready)
+        {
+            sequence_ready_reset;
             
-            // ADC1->CR |= ADC_CR_ADSTART;
+            if (LED)
+                LED_OFF;
+            else
+                LED_ON;
         }
     }    
 #endif

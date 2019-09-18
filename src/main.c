@@ -15,6 +15,7 @@
 #include "gpio.h"
 #include "timer.h"
 #include "usart.h"
+#include "adc.h"
 
 
 
@@ -23,13 +24,11 @@
 volatile unsigned char usart1_have_data = 0;
 // volatile unsigned char usart2_have_data = 0;
 // volatile unsigned char usart3_have_data = 0;
-// #ifdef STM32F10X_HD
 // volatile unsigned char usart4_have_data = 0;
 // volatile unsigned char usart5_have_data = 0;
-// #endif
 
-// unsigned short comms_messages = 0;
-// char buffSendErr[64];
+//--- Externals del ADC
+volatile unsigned short adc_ch [ADC_CHANNEL_QUANTITY] = { 0 };
 
 //--- Externals de los timers
 volatile unsigned short wait_ms_var = 0;
@@ -43,8 +42,7 @@ void TimingDelay_Decrement(void);
 static void Error_Handler(void);
 // extern void EXTI0_IRQHandler (void);
 
-//--- Module Function Definitions ----------
-
+//--- Module Function Definitions ----------------------------------------------
 int main (void)
 {
     //Configuracion systick    
@@ -122,6 +120,25 @@ int main (void)
             Update_TIM1_CH1(pwm);
 
         Wait_ms(2);
+    }    
+#endif
+
+#ifdef HARD_TEST_MODE_ADC1
+    AdcConfig();
+
+    //Start convertions
+    ADC1->CR |= ADC_CR_ADSTART;
+    
+    while(1)
+    {
+        if (ADC1->ISR & ADC_ISR_EOC)
+        {
+            ADC1->ISR |= ADC_ISR_EOC;
+            if (LED)
+                LED_OFF;
+            else
+                LED_ON;
+        }
     }    
 #endif
     

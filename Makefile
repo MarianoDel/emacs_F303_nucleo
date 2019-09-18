@@ -71,7 +71,7 @@ SRC += ./src/it.c
 SRC += ./src/usart.c
 SRC += ./src/timer.c
 # SRC += ./src/flash_program.c
-# SRC += ./src/adc.c
+SRC += ./src/adc.c
 
 
 ## Core Support

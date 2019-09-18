@@ -111,6 +111,19 @@ int main (void)
         }
     }    
 #endif
+
+#ifdef HARD_TEST_MODE_TIMER1
+    unsigned short pwm = 0;
+    TIM_1_Init();
+    
+    while(1)
+    {
+        for (pwm = 0; pwm < DUTY_100_PERCENT; pwm++)
+            Update_TIM1_CH1(pwm);
+
+        Wait_ms(2);
+    }    
+#endif
     
 
 
@@ -133,7 +146,7 @@ int main (void)
 //     Wait_ms(100);
 // #endif
 
-    // TIM_1_Init();
+
     // TIM_4_Init();
 }
 //--- End of Main ---//

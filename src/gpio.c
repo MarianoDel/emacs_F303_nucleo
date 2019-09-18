@@ -80,8 +80,8 @@ void GpioInit (void)
         RCC_GPIOA_CLKEN;
     
     temp = GPIOA->MODER;	//2 bits por pin
-    temp &= 0xFFC3F3FF;		//PA5 output
-    temp |= 0x00280400;        //PA9 PA10 alternative
+    temp &= 0xFFC0F3FF;		//PA5 output
+    temp |= 0x002A0400;        //PA8 PA9 PA10 alternative
     GPIOA->MODER = temp;
 
     temp = GPIOA->OTYPER;	//1 bit por pin

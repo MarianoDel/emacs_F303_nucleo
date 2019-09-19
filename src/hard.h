@@ -39,7 +39,8 @@
 // #define HARD_TEST_MODE_USART1_RX
 // #define HARD_TEST_MODE_TIMER1
 // #define HARD_TEST_MODE_ADC1
-#define HARD_TEST_MODE_ADC1_DMA
+#define HARD_TEST_MODE_ADC1_INT
+// #define HARD_TEST_MODE_ADC1_DMA
 // #define HARD_TEST_MODE_
 // #define HARD_TEST_MODE_
 // #define HARD_TEST_MODE_

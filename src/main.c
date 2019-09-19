@@ -30,7 +30,9 @@ volatile unsigned char usart1_have_data = 0;
 
 //--- Externals del ADC
 volatile unsigned short adc_ch [ADC_CHANNEL_QUANTITY] = { 0 };
-
+#ifdef HARD_TEST_MODE_ADC1_INT
+volatile unsigned char seq_ready = 0;
+#endif
 //--- Externals de los timers
 volatile unsigned short wait_ms_var = 0;
 volatile unsigned short timer_standby = 0;
@@ -141,6 +143,28 @@ int main (void)
             else
                 LED_ON;
         }
+    }    
+#endif
+
+#ifdef HARD_TEST_MODE_ADC1_INT
+    //ADC with ints
+    AdcConfig();
+    ADC1->CR |= ADC_CR_ADSTART;
+    
+    while(1)
+    {
+        Wait_ms(100);
+        ADC1->CR |= ADC_CR_ADSTART;
+            
+        // if (seq_ready)
+        // {
+        //     seq_ready = 0;
+            
+        //     if (LED)
+        //         LED_OFF;
+        //     else
+        //         LED_ON;
+        // }
     }    
 #endif
 

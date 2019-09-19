@@ -76,39 +76,40 @@ void AdcConfig (void)
     ADC1->CFGR = 0x00000000;
     
     //set Continuos or Discontinuous
-    ADC1->CFGR |= ADC_CFGR_CONT;
+    // ADC1->CFGR |= ADC_CFGR_CONT;
     
     //set sampling time for each channel
     // SMPR1 CH1 - CH9
+    ADC1->SMPR1 |= ADC_SMPR1_SMP2_2 | ADC_SMPR1_SMP2_1 | ADC_SMPR1_SMP2_0;    //sample time Channel 2
+    ADC1->SMPR1 |= ADC_SMPR1_SMP3_2 | ADC_SMPR1_SMP3_1 | ADC_SMPR1_SMP3_0;    //sample time Channel 3
     ADC1->SMPR1 |= ADC_SMPR1_SMP4_2 | ADC_SMPR1_SMP4_1 | ADC_SMPR1_SMP4_0;    //sample time Channel 4
     ADC1->SMPR1 |= ADC_SMPR1_SMP5_2 | ADC_SMPR1_SMP5_1 | ADC_SMPR1_SMP5_0;    //sample time Channel 5
     ADC1->SMPR1 |= ADC_SMPR1_SMP6_2 | ADC_SMPR1_SMP6_1 | ADC_SMPR1_SMP6_0;    //sample time Channel 6
     ADC1->SMPR1 |= ADC_SMPR1_SMP7_2 | ADC_SMPR1_SMP7_1 | ADC_SMPR1_SMP7_0;    //sample time Channel 7
     // SMPR2 CH10 - CH18
-    ADC1->SMPR2 |= ADC_SMPR2_SMP14_2 | ADC_SMPR2_SMP14_1 | ADC_SMPR2_SMP14_0;    //sample time Channel 14
-    ADC1->SMPR2 |= ADC_SMPR2_SMP15_2 | ADC_SMPR2_SMP15_1 | ADC_SMPR2_SMP15_0;    //sample time Channel 15
-
 
     //set regular channel selection
     // SQR1 set from first to four conversion (4 regular channels)
-    ADC1->SQR1 |= ADC_SQR1_SQ1_2;                     //Channel 4
-    ADC1->SQR1 |= ADC_SQR1_SQ2_2 | ADC_SQR1_SQ2_0;    //Channel 5
-    ADC1->SQR1 |= ADC_SQR1_SQ3_2 | ADC_SQR1_SQ3_1;    //Channel 6
-    ADC1->SQR1 |= ADC_SQR1_SQ4_2 | ADC_SQR1_SQ4_1 | ADC_SQR1_SQ4_0;    //Channel 7
+    ADC1->SQR1 |= ADC_SQR1_SQ1_1;                     //Channel 2
+    ADC1->SQR1 |= ADC_SQR1_SQ2_1 | ADC_SQR1_SQ2_0;    //Channel 3
+    ADC1->SQR1 |= ADC_SQR1_SQ3_2;                     //Channel 4
+    ADC1->SQR1 |= ADC_SQR1_SQ4_2 | ADC_SQR1_SQ4_0;    //Channel 5
     // SQR2 five to nine conversion (5 regular channels)
-    ADC1->SQR2 |= ADC_SQR2_SQ5_3 | ADC_SQR2_SQ5_3 | ADC_SQR2_SQ5_1;    //Channel 14
-    ADC1->SQR2 |= ADC_SQR2_SQ6_3 | ADC_SQR2_SQ6_2 | ADC_SQR2_SQ6_1 | ADC_SQR2_SQ6_0;    //Channel 15
+    ADC1->SQR2 |= ADC_SQR2_SQ5_2 | ADC_SQR2_SQ5_1;    //Channel 6
+    ADC1->SQR2 |= ADC_SQR2_SQ6_2 | ADC_SQR2_SQ6_1 | ADC_SQR2_SQ6_0;    //Channel 7
     // SQR3 ten to fourteen conversion  (5 regular channels)
     // SQR4 fifteen to sixteen conversion  (2 regular channels)
 
     //set channels quantity to convert
     ADC1->SQR1 |= ADC_SQR1_L_2 | ADC_SQR1_L_1;    //convert 6 channels
+    // ADC1->SQR1 |= ADC_SQR1_L_2 | ADC_SQR1_L_0;    //convert 5 channels
+    // ADC1->SQR1 |= ADC_SQR1_L_2;    //convert 4 channels    
 
 
     
 #ifdef ADC_WITH_INT        
     //set interrupts
-    ADC1->IER |= ADC_IT_EOC;
+    ADC1->IER |= ADC_IER_EOCIE;
 
     //set pointer
     p_channel = &adc_ch[0];
@@ -143,26 +144,47 @@ void AdcConfig (void)
 }
 
 #ifdef ADC_WITH_INT
-void ADC1_COMP_IRQHandler (void)
+void ADC1_2_IRQHandler (void)
 {
-    if (ADC1->ISR & ADC_IT_EOC)
+    if (ADC1->ISR & ADC_ISR_EOS)
     {
-        if (ADC1->ISR & ADC_IT_EOSEQ)	//seguro que es channel4 en posicion 3 en ver_1_1, 3 y 2 en ver_1_0
+        if (LED)
+            LED_OFF;
+        else
+            LED_ON;
+    }
+
+    if (ADC1->ISR & ADC_ISR_EOC)
+    {
+        // if (ADC1->ISR & ADC_ISR_EOS)
+        if (ADC1->ISR & 0x0008)
         {
             p_channel = &adc_ch[ADC_LAST_CHANNEL_QUANTITY];
             *p_channel = ADC1->DR;
             p_channel = &adc_ch[0];
             seq_ready = 1;
+
+
         }
         else
         {
             *p_channel = ADC1->DR;		//
             if (p_channel < &adc_ch[ADC_LAST_CHANNEL_QUANTITY])
                 p_channel++;
+
+            // if (ADC1->ISR & ADC_ISR_EOC)
+            // if (ADC1->ISR & 0x0004)                
+            // {
+            //     ADC1->ISR |= ADC_ISR_EOC;
+            // }
         }
         //clear pending
-        ADC1->ISR |= ADC_IT_EOC | ADC_IT_EOSEQ;
+        ADC1->ISR |= ADC_ISR_EOC | ADC_ISR_EOS;
+
     }
+
+
+
 }
 #endif
 

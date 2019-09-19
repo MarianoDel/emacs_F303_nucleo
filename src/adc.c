@@ -110,6 +110,7 @@ void AdcConfig (void)
 #ifdef ADC_WITH_INT        
     //set interrupts
     ADC1->IER |= ADC_IER_EOCIE;
+    ADC1->IER |= ADC_IER_EOSIE;
 
     //set pointer
     p_channel = &adc_ch[0];
@@ -146,25 +147,23 @@ void AdcConfig (void)
 #ifdef ADC_WITH_INT
 void ADC1_2_IRQHandler (void)
 {
-    if (ADC1->ISR & ADC_ISR_EOS)
-    {
-        if (LED)
-            LED_OFF;
-        else
-            LED_ON;
-    }
+    unsigned int temp = ADC1->ISR;
 
-    if (ADC1->ISR & ADC_ISR_EOC)
+    if (temp & ADC_ISR_EOS)
+        LED_TOGGLE;
+    
+    if (temp & ADC_ISR_EOC)
     {
-        // if (ADC1->ISR & ADC_ISR_EOS)
-        if (ADC1->ISR & 0x0008)
+        if (temp & ADC_ISR_EOS)
         {
             p_channel = &adc_ch[ADC_LAST_CHANNEL_QUANTITY];
             *p_channel = ADC1->DR;
             p_channel = &adc_ch[0];
             seq_ready = 1;
 
-
+            ADC1->ISR |= ADC_ISR_EOS;
+            // LED_OFF;
+            // LED_TOGGLE;
         }
         else
         {
@@ -172,19 +171,10 @@ void ADC1_2_IRQHandler (void)
             if (p_channel < &adc_ch[ADC_LAST_CHANNEL_QUANTITY])
                 p_channel++;
 
-            // if (ADC1->ISR & ADC_ISR_EOC)
-            // if (ADC1->ISR & 0x0004)                
-            // {
-            //     ADC1->ISR |= ADC_ISR_EOC;
-            // }
+            ADC1->ISR |= ADC_ISR_EOC;
+            // LED_TOGGLE;
         }
-        //clear pending
-        ADC1->ISR |= ADC_ISR_EOC | ADC_ISR_EOS;
-
     }
-
-
-
 }
 #endif
 

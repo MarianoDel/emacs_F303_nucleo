@@ -39,6 +39,7 @@
 // #define HARD_TEST_MODE_USART1_RX
 // #define HARD_TEST_MODE_TIMER1
 // #define HARD_TEST_MODE_ADC1
+// #define HARD_TEST_MODE_ADC1_EOS
 #define HARD_TEST_MODE_ADC1_INT
 // #define HARD_TEST_MODE_ADC1_DMA
 // #define HARD_TEST_MODE_
@@ -308,7 +309,11 @@ typedef enum {
 
 
 //--- Exported Module Functions ----
-
+#define LED_TOGGLE    do { if (LED) \
+                               LED_OFF; \
+                           else  \
+                               LED_ON; \
+                         } while (0)
 
 #endif
 

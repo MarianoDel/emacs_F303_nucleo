@@ -62,12 +62,17 @@ int main (void)
 #ifdef HARD_TEST_MODE_LED_SWITCH
     while(1)
     {
-        if (USER_BLUE)
-            LED_ON;
-        else
-            LED_OFF;
+        // if (USER_BLUE)
+        //     LED_ON;
+        // else
+        //     LED_OFF;
 
-        Wait_ms(10);
+        // Wait_ms(10);
+        if (USER_BLUE)
+        {
+            LED_TOGGLE;
+            Wait_ms(500);
+        }
     }    
 #endif
 
@@ -146,25 +151,38 @@ int main (void)
     }    
 #endif
 
-#ifdef HARD_TEST_MODE_ADC1_INT
-    //ADC with ints
+#ifdef HARD_TEST_MODE_ADC1_EOS
+    //undef the dma conf on adc.h
     AdcConfig();
+
+    //Start convertions
     ADC1->CR |= ADC_CR_ADSTART;
     
     while(1)
     {
+        //eoc & eos funciona ok
+        unsigned int temp = ADC1->ISR;
+        if ((temp & ADC_ISR_EOC) && (temp & ADC_ISR_EOS))
+        {
+            ADC1->ISR |= ADC_ISR_EOS;
+            LED_OFF;
+            Wait_ms(100);
+            ADC1->CR |= ADC_CR_ADSTART;
+            LED_ON;
+        }
+        //fin eoc & eos funciona ok
+    }    
+#endif
+    
+#ifdef HARD_TEST_MODE_ADC1_INT
+    //ADC with ints
+    AdcConfig();
+
+    while(1)
+    {
         Wait_ms(100);
         ADC1->CR |= ADC_CR_ADSTART;
-            
-        // if (seq_ready)
-        // {
-        //     seq_ready = 0;
-            
-        //     if (LED)
-        //         LED_OFF;
-        //     else
-        //         LED_ON;
-        // }
+        LED_ON;
     }    
 #endif
 

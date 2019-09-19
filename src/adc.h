@@ -14,7 +14,9 @@
 
 //----------- Defines For Configuration --------------//
 //----------- Some ADC Configurations ----------------//
+#ifdef HARD_TEST_MODE_ADC1_INT
 #define ADC_WITH_INT
+#endif
 // #define ADC_WITH_DMA
 
 

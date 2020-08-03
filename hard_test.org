@@ -1,0 +1,8 @@
+* Tests de Hardware con la Placa NUCLEO-F303RE
+** Alimentacion
+   - La toma directamente por el cable USB-mini USB
+
+** Para grabar usando el ST-LINK V2.1 embebido en la placa
+   - conectar directamente el cable USB-mini USB a la placa
+   - los 2 jumpers CN2 deben estar colocados
+

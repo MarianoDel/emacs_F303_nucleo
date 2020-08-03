@@ -13,7 +13,7 @@
 
 //-- Configurations
 #define GPIOA_ENABLE
-// #define GPIOB_ENABLE
+#define GPIOB_ENABLE
 #define GPIOC_ENABLE
 // #define GPIOD_ENABLE
 

@@ -78,11 +78,18 @@ void GpioInit (void)
 #ifdef GPIOA_ENABLE
     if (!RCC_GPIOA_CLK)
         RCC_GPIOA_CLKEN;
-    
+
+// #ifdef HARD_TEST_MODE_SPI_MASTER
+//     temp = GPIOA->MODER;	//2 bits por pin
+//     temp &= 0xFFFF03FF;		//PA5 PA6 PA7 alternative
+//     temp |= 0x0000A800;        //
+//     GPIOA->MODER = temp;
+// #else
     temp = GPIOA->MODER;	//2 bits por pin
     temp &= 0xFFC0F3FF;		//PA5 output
     temp |= 0x002A0400;        //PA8 PA9 PA10 alternative
     GPIOA->MODER = temp;
+// #endif
 
     temp = GPIOA->OTYPER;	//1 bit por pin
     temp &= 0xFFFFFFFF;
@@ -107,13 +114,13 @@ void GpioInit (void)
         RCC_GPIOB_CLKEN;
     
     temp = GPIOB->MODER;	//2 bits por pin
-    temp &= 0xFFFFC3C0;		//PA0 - PA2 (analog input); PA5 - PA6 (analog input)
-    temp |= 0x00003C3F;		
+    temp &= 0xFFF0FFFF;		//PB9 - PB8 (alternative)
+    temp |= 0x000A0000;		
     GPIOB->MODER = temp;
 
     temp = GPIOB->OTYPER;	//1 bit por pin
-    temp &= 0xFFFFFFFF;
-    temp |= 0x00000000;
+    temp &= 0xFFFFF0FF;         //PB9 - PB8 open drain
+    temp |= 0x00000300;
     GPIOB->OTYPER = temp;
 
     temp = GPIOB->OSPEEDR;	//2 bits por pin
@@ -122,8 +129,8 @@ void GpioInit (void)
     GPIOB->OSPEEDR = temp;
 
     temp = GPIOB->PUPDR;	//2 bits por pin
-    temp &= 0xFFFFFFFF;
-    temp |= 0x00000000;
+    temp &= 0xFFF0FFFF;        //PB9 - PB8 pullup
+    temp |= 0x00050000;
     GPIOB->PUPDR = temp;
 
 #endif    //GPIOB_ENABLE

@@ -22,17 +22,7 @@
 #define SOFTWARE_VERSION_1_0        //gpios tests
 
 //-------- Type of Program (depending on software version) ----------------
-// #define INVERTER_SQUARE_MODE
-// #define INVERTER_QUASI_SINE_WAVE
-// #define INVERTER_PURE_SINUSOIDAL
 
-// #define USE_FREQ_18KHZ
-// #define USE_FREQ_9KHZ
-// #define USE_FREQ_4_5KHZ
-
-#ifdef INVERTER_SQUARE_MODE
-// #define USE_CHANNELS_WITH_PRELOAD
-#endif
 //-------- Type of Program and Features ----------------
 // #define HARD_TEST_MODE_LED_SWITCH
 // #define HARD_TEST_MODE_USART1_TX
@@ -40,10 +30,10 @@
 // #define HARD_TEST_MODE_TIMER1
 // #define HARD_TEST_MODE_ADC1
 // #define HARD_TEST_MODE_ADC1_EOS
-#define HARD_TEST_MODE_ADC1_INT
+// #define HARD_TEST_MODE_ADC1_INT
 // #define HARD_TEST_MODE_ADC1_DMA
-// #define HARD_TEST_MODE_
-// #define HARD_TEST_MODE_
+// #define HARD_TEST_MODE_I2C1_MASTER
+#define HARD_TEST_MODE_SPI_MASTER
 // #define HARD_TEST_MODE_
 
 //-------- Kind of Reports Sended ----------------
@@ -91,52 +81,52 @@ typedef enum {
 
 } resp_t;
 
-enum resultados
-{
-	NO_INIT = 0,
-	TRABAJANDO,
-	FIN_OK,
-	FIN_ERROR,
-	FIN_TIMEOUT
-};
+// enum resultados
+// {
+// 	NO_INIT = 0,
+// 	TRABAJANDO,
+// 	FIN_OK,
+// 	FIN_ERROR,
+// 	FIN_TIMEOUT
+// };
 
-enum bool
-{
-	FALSE = 0,
-	TRUE = !FALSE
-};
+// enum bool
+// {
+// 	FALSE = 0,
+// 	TRUE = !FALSE
+// };
 
 
-#define TT_ON    9000
-#define TT_DEAD_TIME    1000
-#define TT_THIRD    3266
-#define TT_SINE_POINT    200
+// #define TT_ON    9000
+// #define TT_DEAD_TIME    1000
+// #define TT_THIRD    3266
+// #define TT_SINE_POINT    200
 
-#if (defined INVERTER_SQUARE_MODE) || (defined INVERTER_PURE_SINUSOIDAL)
-typedef enum {
-    ON_LEFT = 0,
-    WAIT_DEAD_TIME_LEFT,
-    ON_RIGHT,
-    WAIT_DEAD_TIME_RIGHT,
-    JUMPER_PROTECTED
+// #if (defined INVERTER_SQUARE_MODE) || (defined INVERTER_PURE_SINUSOIDAL)
+// typedef enum {
+//     ON_LEFT = 0,
+//     WAIT_DEAD_TIME_LEFT,
+//     ON_RIGHT,
+//     WAIT_DEAD_TIME_RIGHT,
+//     JUMPER_PROTECTED
 
-} pin_state_t;
-#endif
+// } pin_state_t;
+// #endif
 
-#ifdef INVERTER_QUASI_SINE_WAVE
-typedef enum {
-    ON_LEFT_RISING = 0,
-    ON_LEFT_FULL,
-    ON_LEFT_FALLING,
-    WAIT_DEAD_TIME_LEFT,
-    ON_RIGHT_RISING,
-    ON_RIGHT_FULL,
-    ON_RIGHT_FALLING,    
-    WAIT_DEAD_TIME_RIGHT,
-    JUMPER_PROTECTED
+// #ifdef INVERTER_QUASI_SINE_WAVE
+// typedef enum {
+//     ON_LEFT_RISING = 0,
+//     ON_LEFT_FULL,
+//     ON_LEFT_FALLING,
+//     WAIT_DEAD_TIME_LEFT,
+//     ON_RIGHT_RISING,
+//     ON_RIGHT_FULL,
+//     ON_RIGHT_FALLING,    
+//     WAIT_DEAD_TIME_RIGHT,
+//     JUMPER_PROTECTED
 
-} pin_state_t;
-#endif
+// } pin_state_t;
+// #endif
 
 
 

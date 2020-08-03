@@ -17,6 +17,8 @@
 #include "usart.h"
 #include "adc.h"
 #include "dma.h"
+#include "i2c.h"
+#include "spi.h"
 
 
 
@@ -207,7 +209,38 @@ int main (void)
         }
     }    
 #endif
+
+
+#ifdef HARD_TEST_MODE_I2C1_MASTER
+    I2C1_Init();
+
+    while (1)
+    {
+        Wait_ms(300);
+        I2C1_SendByte(0);
+        if (LED)
+            LED_OFF;
+        else
+            LED_ON;
+    }
     
+#endif
+
+#ifdef HARD_TEST_MODE_SPI_MASTER
+    // SPI_Config();
+
+    while (1)
+    {
+        Wait_ms(300);
+        // SPI_Send_Single('A');
+        if (LED)
+            LED_OFF;
+        else
+            LED_ON;
+    }
+    
+#endif
+
 
 
     //-- Welcome Messages --------------------

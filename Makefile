@@ -72,7 +72,9 @@ SRC += ./src/usart.c
 SRC += ./src/timer.c
 # SRC += ./src/flash_program.c
 SRC += ./src/adc.c
+SRC += ./src/i2c.c
 SRC += ./src/dma.c
+SRC += ./src/spi.c
 
 
 ## Core Support

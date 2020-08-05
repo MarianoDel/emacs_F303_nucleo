@@ -79,17 +79,22 @@ void GpioInit (void)
     if (!RCC_GPIOA_CLK)
         RCC_GPIOA_CLKEN;
 
-// #ifdef HARD_TEST_MODE_SPI_MASTER
-//     temp = GPIOA->MODER;	//2 bits por pin
-//     temp &= 0xFFFF03FF;		//PA5 PA6 PA7 alternative
-//     temp |= 0x0000A800;        //
-//     GPIOA->MODER = temp;
-// #else
+#ifdef HARD_TEST_MODE_SPI_MASTER
+    temp = GPIOA->MODER;	//2 bits por pin
+    temp &= 0xFFFF03FF;		//PA5 PA6 PA7 alternative
+    temp |= 0x0000A800;        //
+    GPIOA->MODER = temp;
+#elif defined HARD_TEST_MODE_RC522
+    temp = GPIOA->MODER;	//2 bits por pin
+    temp &= 0xFFC303FF;		//PA5 PA6 PA7 alternative
+    temp |= 0x0028A800;        //PA9 PA10 alternative
+    GPIOA->MODER = temp;    
+#else
     temp = GPIOA->MODER;	//2 bits por pin
     temp &= 0xFFC0F3FF;		//PA5 output
     temp |= 0x002A0400;        //PA8 PA9 PA10 alternative
     GPIOA->MODER = temp;
-// #endif
+#endif
 
     temp = GPIOA->OTYPER;	//1 bit por pin
     temp &= 0xFFFFFFFF;

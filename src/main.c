@@ -19,6 +19,7 @@
 #include "dma.h"
 #include "i2c.h"
 #include "spi.h"
+#include "test_mfrc522.h"
 
 
 
@@ -227,20 +228,29 @@ int main (void)
 #endif
 
 #ifdef HARD_TEST_MODE_SPI_MASTER
-    // SPI_Config();
+    SPI_Config();
 
     while (1)
     {
         Wait_ms(300);
-        // SPI_Send_Single('A');
-        if (LED)
-            LED_OFF;
-        else
-            LED_ON;
+        SPI_Send_Single('A');
     }
     
 #endif
 
+#ifdef HARD_TEST_MODE_RC522
+    SPI_Config();
+    Usart1Config();
+    Usart1Send("\nRC-522 Test...\n");
+    Wait_ms(1000);
+
+    while (1)
+    {
+        TEST_Mfrc522();
+    }
+    
+#endif
+    
 
 
     //-- Welcome Messages --------------------

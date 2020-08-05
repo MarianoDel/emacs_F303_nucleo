@@ -6,3 +6,20 @@
    - conectar directamente el cable USB-mini USB a la placa
    - los 2 jumpers CN2 deben estar colocados
 
+* Armo un test para la placa RFID-RC522 de bajo costo
+** Links a las libs que uso
+   https://github.com/nmuntyanov/stm32f103c8t6-rc522/blob/master/src/main.c
+
+   https://github.com/patelsubhash/RC522/blob/master/ESP32IDF/MFRC522.c
+
+   https://github.com/abobija/esp-idf-rc522/blob/master/rc522.c
+
+   https://github.com/fmilburn3/CardReader_RFID_RC522/blob/master/Mfrc522.cpp
+
+** Armo dos modulos exportables
+*** mfrc522 comunica SPI con la placa RFID-RC522
+    - para exportar facilmente requiere de las funciones de spi del micro
+      especifico
+
+*** test_mfrc522 programa de pruebas exportable
+

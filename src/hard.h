@@ -33,7 +33,8 @@
 // #define HARD_TEST_MODE_ADC1_INT
 // #define HARD_TEST_MODE_ADC1_DMA
 // #define HARD_TEST_MODE_I2C1_MASTER
-#define HARD_TEST_MODE_SPI_MASTER
+// #define HARD_TEST_MODE_SPI_MASTER
+#define HARD_TEST_MODE_RC522
 // #define HARD_TEST_MODE_
 
 //-------- Kind of Reports Sended ----------------

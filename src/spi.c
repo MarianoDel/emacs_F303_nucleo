@@ -72,26 +72,22 @@ void SPI_Config(void)
 
 unsigned char SPI_Send_Receive (unsigned char a)
 {
-    unsigned char rx;
+    unsigned char dummy;
 
-    //primero limpio buffer rx spi
-    while ((SPI1->SR & SPI_SR_RXNE) == 1)
-    {
-        rx = SPI1->DR & 0x0F;
-    }
+    //espero que se libere el buffer
+    while (((SPI1->SR & SPI_SR_TXE) == 0) || ((SPI1->SR & SPI_SR_BSY) != 0));
 
-    //espero que haya lugar en el buffer
-    while ((SPI1->SR & SPI_SR_TXE) == 0);
+    //limpio buffer RxFIFO
+    while ((SPI1->SR & SPI_SR_RXNE) != 0)
+        dummy = SPI1->DR;
 
     *(__IO uint8_t *) ((uint32_t)SPI1 + (uint32_t)0x0C) = a; //evito enviar 16bits problemas de compilador
 
-    //espero tener el dato en RX
-    for (unsigned char j = 0; j < 150; j++)
-    {
-    	asm("nop");
-    }
+    //espero que se transfiera el dato
+    while ((SPI1->SR & SPI_SR_BSY) != 0);
 
-    return (SPI1->DR & 0x0F);
+    dummy = (unsigned char) SPI1->DR;
+    return dummy;
 }
 
 

@@ -76,6 +76,10 @@ SRC += ./src/i2c.c
 SRC += ./src/dma.c
 SRC += ./src/spi.c
 
+## libs to test
+SRC += ./src/mfrc522.c
+SRC += ./src/test_mfrc522.c
+
 
 ## Core Support
 SRC += ./startup_src/syscalls.c

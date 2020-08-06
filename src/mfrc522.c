@@ -14,6 +14,9 @@
 #include "usart.h"
 #include "hard.h"
 #include "spi.h"
+#include "timer.h"
+
+#include <stdio.h>
 
 // Externals -------------------------------------------------------------------
 
@@ -22,18 +25,23 @@
 
 
 // Module Private Types & Macros -----------------------------------------------
-#define MFRC522_CS_ON    OUT1_OFF
-#define MFRC522_CS_OFF    OUT1_ON
+#define MFRC522_CS_ON    OUTA0_OFF
+#define MFRC522_CS_OFF    OUTA0_ON
+#define MFRC522_RST_ON    OUTA1_OFF
+#define MFRC522_RST_OFF    OUTA1_ON
 
 
 // Module Private Functions ----------------------------------------------------
-void MFRC522_CS_Enable(void);
-void MFRC522_CS_Disable(void);
+void MFRC522_CS_Enable (void);
+void MFRC522_CS_Disable (void);
+void MFRC522_Hard_Reset (void);
 
 
 // Module Functions ------------------------------------------------------------
 void MFRC522_Init (void)
 {
+    MFRC522_Hard_Reset();
+    MFRC522_CS_Disable();
     MFRC522_SelfTest();
 
     MFRC522_Reset();
@@ -48,6 +56,8 @@ void MFRC522_Init (void)
 
 void MFRC522_SelfTest (void)
 {
+    char s_buf [10] = { 0 };
+    
     MFRC522_Write(MFRC522_CommandReg, PCD_RESETPHASE);
     MFRC522_Write(MFRC522_FIFOLevelReg, 0x80);
     for (uint8_t i = 0; i < 25; i++)
@@ -69,15 +79,31 @@ void MFRC522_SelfTest (void)
     
     MFRC522_Write(MFRC522_CommandReg, PCD_IDLE);
 
-    for (uint8_t i = 0; i < 64; i++)
+    Usart1Send("Self Test Results:\n");
+    for (uint8_t i = 0; i < 8; i++)
     {
-        unsigned char val = 0;
-        val = MFRC522_Read(MFRC522_FIFODataReg);
-        Usart1SendUnsigned (&val, 1);
+        for (uint8_t j = 0; j < 8; j++)
+        {
+            unsigned char val = 0;
+            val = MFRC522_Read(MFRC522_FIFODataReg);
+            sprintf(s_buf, "0x%02x ", val);
+            Usart1Send (s_buf);
+            Wait_ms(10);
+        }
+        Usart1Send("\n");
     }
 
     MFRC522_Write(MFRC522_AutoTestReg, 0x00);
 }
+
+
+unsigned char MFRC522_Verify_Version (void)
+{
+    unsigned char version = 0;
+    version = MFRC522_Read(MFRC522_VersionReg);
+    return version;
+}
+
 
 void MFRC522_CS_Enable(void)
 {
@@ -88,6 +114,20 @@ void MFRC522_CS_Enable(void)
 void MFRC522_CS_Disable(void)
 {
     MFRC522_CS_OFF;
+}
+
+void MFRC522_Hard_Reset (void)
+{
+    volatile unsigned char delay;
+
+    MFRC522_RST_ON;
+    for (delay = 0; delay < 100; delay++)
+    {
+        asm (	"nop \n\t"
+                "nop \n\t"
+                "nop \n\t" );
+    }
+    MFRC522_RST_OFF;
 }
 
 
@@ -107,7 +147,8 @@ uint8_t MFRC522_Compare(uint8_t * CardID, uint8_t * CompareID)
 {
     uint8_t i;
     for (i = 0; i < 5; i++) {
-        if (CardID[i] != CompareID[i]) return MI_ERR;
+        if (CardID[i] != CompareID[i])
+            return MI_ERR;
     }
 
     return MI_OK;

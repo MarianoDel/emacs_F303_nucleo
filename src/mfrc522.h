@@ -138,6 +138,7 @@ typedef enum
 
 
 // Exported Functions ----------------------------------------------------------
+unsigned char MFRC522_Verify_Version (void);
 void MFRC522_Init (void);
 void MFRC522_SelfTest (void);
 uint8_t MFRC522_Check (uint8_t * id);

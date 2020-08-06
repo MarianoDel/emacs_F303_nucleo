@@ -86,8 +86,8 @@ void GpioInit (void)
     GPIOA->MODER = temp;
 #elif defined HARD_TEST_MODE_RC522
     temp = GPIOA->MODER;	//2 bits por pin
-    temp &= 0xFFC303FF;		//PA5 PA6 PA7 alternative
-    temp |= 0x0028A800;        //PA9 PA10 alternative
+    temp &= 0xFFC300F0;		//PA0 PA1 out; PA4 input; PA5 PA6 PA7 alternative
+    temp |= 0x0028A805;        //PA9 PA10 alternative
     GPIOA->MODER = temp;    
 #else
     temp = GPIOA->MODER;	//2 bits por pin
@@ -107,8 +107,8 @@ void GpioInit (void)
     GPIOA->OSPEEDR = temp;
 
     temp = GPIOA->PUPDR;	//2 bits por pin
-    temp &= 0xFFFFFFFF;
-    temp |= 0x00000000;
+    temp &= 0xFFFFFCFF;        //PA4 pullup
+    temp |= 0x00000100;
     GPIOA->PUPDR = temp;
 
 #endif    //GPIOA_ENABLE

@@ -135,11 +135,21 @@ typedef enum {
 #ifdef HARDWARE_VERSION_1_0
 
 //--- Port A ---//
-//GPIOA pin0
-//GPIOA pin1
+//GPIOA pin0    A0 en la placa
+#define OUTA0    ((GPIOA->ODR & 0x0001) != 0)
+#define OUTA0_ON    (GPIOA->BSRR = 0x00000001)
+#define OUTA0_OFF   (GPIOA->BSRR = 0x00010000)
+
+//GPIOA pin1    A1 en la placa
+#define OUTA1    ((GPIOA->ODR & 0x0002) != 0)
+#define OUTA1_ON    (GPIOA->BSRR = 0x00000002)
+#define OUTA1_OFF   (GPIOA->BSRR = 0x00020000)
+
 //GPIOA pin2
 //GPIOA pin3
-//GPIOA pin4    NC
+
+//GPIOA pin4    A2 en la placa
+#define INA4    ((GPIOA->IDR & 0x0010) == 0)
 
 //GPIOA pin5
 #define LED ((GPIOA->ODR & 0x0020) != 0)
